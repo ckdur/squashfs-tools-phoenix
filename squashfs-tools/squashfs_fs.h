@@ -27,8 +27,8 @@
 #define SQUASHFS_CACHED_FRAGMENTS	CONFIG_SQUASHFS_FRAGMENT_CACHE_SIZE	
 #define SQUASHFS_MAJOR			4
 #define SQUASHFS_MINOR			0
-#define SQUASHFS_MAGIC			0x73717368
-#define SQUASHFS_MAGIC_SWAP		0x68737173
+#define SQUASHFS_MAGIC			0x3e232b24
+#define SQUASHFS_MAGIC_SWAP		0x242b233e
 #define SQUASHFS_START			0
 
 /* size of metadata (inode and directory) blocks */
@@ -289,26 +289,36 @@ typedef long long		squashfs_inode;
 #define LZ4_COMPRESSION		5
 #define ZSTD_COMPRESSION	6
 
-struct squashfs_super_block {
-	unsigned int		s_magic;
-	unsigned int		inodes;
-	unsigned int		mkfs_time /* time of filesystem creation */;
-	unsigned int		block_size;
-	unsigned int		fragments;
-	unsigned short		compression;
-	unsigned short		block_log;
-	unsigned short		flags;
-	unsigned short		no_ids;
-	unsigned short		s_major;
-	unsigned short		s_minor;
-	squashfs_inode		root_inode;
-	long long		bytes_used;
-	long long		id_table_start;
-	long long		xattr_id_table_start;
-	long long		inode_table_start;
-	long long		directory_table_start;
-	long long		fragment_table_start;
-	long long		lookup_table_start;
+struct __attribute__((__packed__)) squashfs_super_block {
+	unsigned int		s_magic; // 0x0 - 0x4
+	unsigned int		inodes; // 0x4 - 0x8
+	unsigned int		mkfs_time; // 0x8 - 0xc  /* time of filesystem creation */
+	unsigned int		block_size; // 0xc - 0xf
+	unsigned int		fragments; // 0x10 - 0x13
+
+	unsigned int        random1; // 0x14 - 0x17
+
+	unsigned short		compression; // 0x18 - 0x19
+	unsigned short		block_log; // 0x1a - 0x1b
+	unsigned short		flags; // 0x1c - 0x1d
+
+	unsigned short		ramdom2; // 0x1e - 0x1f
+	unsigned int        random3; // 0x20 - 0x23
+
+	unsigned short		no_ids; // 0x24 - 0x25
+	unsigned short		s_major; // 0x26 - 0x27
+	unsigned short		s_minor; // 0x28 - 0x29
+
+	unsigned short		ramdom4; // 0x2a - 0x2b
+
+	long long		bytes_used; // 0x2c - 0x33
+	squashfs_inode		root_inode; // 0x34 - 0x3b
+	long long		id_table_start; // 0x3c - 0x43 (NOT CHECKED)
+	long long		xattr_id_table_start; // 0x44 - 0x4b (NOT CHECKED)
+	long long		inode_table_start; // 0x4c - 0x53
+	long long		directory_table_start; // 0x54 - 0x5b
+	long long		fragment_table_start; // 0x5c - 0x63 (NOT CHECKED)
+	long long		lookup_table_start; // 0x64 - 0x5b (NOT CHECKED)
 };
 
 struct squashfs_dir_index {
