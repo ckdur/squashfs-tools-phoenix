@@ -399,11 +399,11 @@ struct squashfs_reg_inode_header {
 	unsigned short		uid;
 	unsigned short		guid;
 	unsigned int		mtime;
-	unsigned int 		inode_number;
-	unsigned int		start_block;
-	unsigned int		fragment;
-	unsigned int		offset;
-	unsigned int		file_size;
+	unsigned int 		inode_number; // 12
+	unsigned int		start_block; // 16
+	unsigned int		fragment; // 20
+	unsigned int		offset; // 24
+	unsigned int		file_size; // 28
 	unsigned int		block_list[0];
 };
 
@@ -424,18 +424,18 @@ struct squashfs_lreg_inode_header {
 	unsigned int		block_list[0];
 };
 
-struct squashfs_dir_inode_header {
-	unsigned short		inode_type;
-	unsigned short		mode;
-	unsigned short		uid;
-	unsigned short		guid;
-	unsigned int		mtime;
-	unsigned int 		inode_number;
-	unsigned int		start_block;
-	unsigned int		nlink;
-	unsigned short		file_size;
-	unsigned short		offset;
-	unsigned int		parent_inode;
+struct __attribute__((__packed__)) squashfs_dir_inode_header {
+	unsigned short		inode_type; // 0
+	unsigned short		mode; // 2
+	unsigned short		uid; // 4
+	unsigned short		guid; // 6
+	unsigned int		mtime; // 8
+	unsigned int 		inode_number; // 12 (NOT TESTED)
+	unsigned int		nlink; // 16
+	unsigned int		start_block; // 20 (NOT sure)
+	unsigned short		file_size; // 24
+	unsigned short		offset; // 26
+	unsigned int		parent_inode; // 28 (NOT quite TESTED)
 };
 
 struct squashfs_ldir_inode_header {
@@ -469,11 +469,12 @@ union squashfs_inode_header {
 };
 	
 struct squashfs_dir_entry {
-	unsigned short		offset;
-	short			inode_number;
-	unsigned short		type;
-	unsigned short		size;
-	char			name[0];
+	unsigned short		offset; // 0
+	short			inode_number; // 2
+	unsigned short		dummy; // 4
+	unsigned short		type; // 6
+	unsigned short		size; // 8
+	char			name[0]; // 10
 };
 
 struct squashfs_dir_header {
