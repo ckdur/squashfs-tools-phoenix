@@ -486,7 +486,7 @@ endif
 
 YEAR := $(firstword $(subst /, , $(DATE)))
 
-CFLAGS += -g -DVERSION=\"$(VERSION)\" -DDATE=\"$(DATE)\" -DYEAR=\"$(YEAR)\" -DSQUASHFS_TRACE
+CFLAGS += -g -DVERSION=\"$(VERSION)\" -DDATE=\"$(DATE)\" -DYEAR=\"$(YEAR)\"
 
 .PHONY: all
 all: mksquashfs unsquashfs
